@@ -71,6 +71,14 @@
     [sectionController didSelectItemAtIndex:indexPath.item];
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    // forward this method to the delegate b/c this implementation will steal the message from the proxy
+    id<UICollectionViewDelegate> collectionViewDelegate = self.collectionViewDelegate;
+    if ([collectionViewDelegate respondsToSelector:@selector(collectionView:didDeselectItemAtIndexPath:)]) {
+        [collectionViewDelegate collectionView:collectionView didDeselectItemAtIndexPath:indexPath];
+    }
+}
+
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
     // forward this method to the delegate b/c this implementation will steal the message from the proxy
     id<UICollectionViewDelegate> collectionViewDelegate = self.collectionViewDelegate;

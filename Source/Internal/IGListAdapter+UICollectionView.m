@@ -60,6 +60,18 @@
 
 #pragma mark - UICollectionViewDelegate
 
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    BOOL shouldSelect = YES;
+
+    // forward this method to the delegate b/c this implementation will steal the message from the proxy
+    id<UICollectionViewDelegate> collectionViewDelegate = self.collectionViewDelegate;
+    if ([collectionViewDelegate respondsToSelector:@selector(collectionView:didSelectItemAtIndexPath:)]) {
+        shouldSelect = shouldSelect && [collectionViewDelegate collectionView:collectionView shouldSelectItemAtIndexPath:indexPath];
+    }
+
+    return shouldSelect;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     // forward this method to the delegate b/c this implementation will steal the message from the proxy
     id<UICollectionViewDelegate> collectionViewDelegate = self.collectionViewDelegate;

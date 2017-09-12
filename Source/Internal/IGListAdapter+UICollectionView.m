@@ -65,7 +65,7 @@
 
     // forward this method to the delegate b/c this implementation will steal the message from the proxy
     id<UICollectionViewDelegate> collectionViewDelegate = self.collectionViewDelegate;
-    if ([collectionViewDelegate respondsToSelector:@selector(collectionView:didSelectItemAtIndexPath:)]) {
+    if ([collectionViewDelegate respondsToSelector:@selector(collectionView:shouldSelectItemAtIndexPath:)]) {
         shouldSelect = shouldSelect && [collectionViewDelegate collectionView:collectionView shouldSelectItemAtIndexPath:indexPath];
     }
 

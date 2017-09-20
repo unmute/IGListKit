@@ -123,4 +123,25 @@ typedef NS_ENUM(NSInteger, IGListDiffingSectionState) {
     [self.selectionDelegate sectionController:self didSelectItemAtIndex:index viewModel:self.viewModels[index]];
 }
 
+- (void)didDeselectItemAtIndex:(NSInteger)index {
+    id<IGListBindingSectionControllerSelectionDelegate> selectionDelegate = self.selectionDelegate;
+    if ([selectionDelegate respondsToSelector:@selector(sectionController:didDeselectItemAtIndex:viewModel:)]) {
+        [selectionDelegate sectionController:self didDeselectItemAtIndex:index viewModel:self.viewModels[index]];
+    }
+}
+
+- (void)didHighlightItemAtIndex:(NSInteger)index {
+    id<IGListBindingSectionControllerSelectionDelegate> selectionDelegate = self.selectionDelegate;
+    if ([selectionDelegate respondsToSelector:@selector(sectionController:didHighlightItemAtIndex:viewModel:)]) {
+        [selectionDelegate sectionController:self didHighlightItemAtIndex:index viewModel:self.viewModels[index]];
+    }
+}
+
+- (void)didUnhighlightItemAtIndex:(NSInteger)index {
+    id<IGListBindingSectionControllerSelectionDelegate> selectionDelegate = self.selectionDelegate;
+    if ([selectionDelegate respondsToSelector:@selector(sectionController:didUnhighlightItemAtIndex:viewModel:)]) {
+        [selectionDelegate sectionController:self didUnhighlightItemAtIndex:index viewModel:self.viewModels[index]];
+    }
+}
+
 @end

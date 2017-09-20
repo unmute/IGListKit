@@ -9,6 +9,7 @@
 
 #import <XCTest/XCTest.h>
 
+#import <OCMock/OCMock.h>
 #import <IGListKit/IGListKit.h>
 
 #import "IGTestDiffingDataSource.h"
@@ -20,6 +21,7 @@
 #import "IGTestObject.h"
 #import "IGTestCell.h"
 #import "IGListTestCase.h"
+#import "IGTestBindingWithoutDeselectionDelegate.h"
 
 @interface IGListBindingSectionControllerTests : IGListTestCase
 
@@ -110,6 +112,49 @@
     [self.adapter collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
     IGTestDiffingSectionController *section = [self.adapter sectionControllerForObject:self.dataSource.objects.firstObject];
     XCTAssertEqualObjects(section.selectedViewModel, @"seven");
+}
+
+- (void)test_whenDeselectingCell_thatCorrectViewModelSelected {
+    [self setupWithObjects:@[
+                             [[IGTestDiffingObject alloc] initWithKey:@1 objects:@[@7, @"seven"]],
+                             ]];
+    [self.adapter collectionView:self.collectionView didDeselectItemAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
+    IGTestDiffingSectionController *section = [self.adapter sectionControllerForObject:self.dataSource.objects.firstObject];
+    XCTAssertEqualObjects(section.deselectedViewModel, @"seven");
+}
+
+- (void)test_whenHighlightingCell_thatCorrectViewModelHighlighted {
+    [self setupWithObjects:@[
+                             [[IGTestDiffingObject alloc] initWithKey:@1 objects:@[@7, @"seven"]],
+                             ]];
+    [self.adapter collectionView:self.collectionView didHighlightItemAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
+    IGTestDiffingSectionController *section = [self.adapter sectionControllerForObject:self.dataSource.objects.firstObject];
+    XCTAssertEqualObjects(section.highlightedViewModel, @"seven");
+}
+
+- (void)test_whenUnhighlightingCell_thatCorrectViewModelUnhighlighted {
+    [self setupWithObjects:@[
+                             [[IGTestDiffingObject alloc] initWithKey:@1 objects:@[@7, @"seven"]],
+                             ]];
+    [self.adapter collectionView:self.collectionView didUnhighlightItemAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
+    IGTestDiffingSectionController *section = [self.adapter sectionControllerForObject:self.dataSource.objects.firstObject];
+    XCTAssertEqualObjects(section.unhighlightedViewModel, @"seven");
+}
+
+- (void)test_whenDeselectingCell_withoutImplementation_thatNoOps {
+    [self setupWithObjects:@[
+                             [[IGTestDiffingObject alloc] initWithKey:@1 objects:@[@7, @"seven"]],
+                             ]];
+
+    IGTestBindingWithoutDeselectionDelegate *delegate = [IGTestBindingWithoutDeselectionDelegate new];
+    IGTestDiffingSectionController *section = [self.adapter sectionControllerForObject:self.dataSource.objects.firstObject];
+    section.selectionDelegate = delegate;
+
+    [self.adapter collectionView:self.collectionView didDeselectItemAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
+    XCTAssertFalse(delegate.selected);
+
+    [self.adapter collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
+    XCTAssertTrue(delegate.selected);
 }
 
 - (void)test_whenAdapterReloadsObjects_thatSectionUpdated {

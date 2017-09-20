@@ -51,9 +51,11 @@ NS_SWIFT_NAME(ListScrollDelegate)
 
  @param listAdapter The list adapter whose collection view ended decelerating.
  @param sectionController The visible section controller that ended decelerating.
+
+ @note This method is `@optional` until the next breaking-change release.
  */
 @optional
-- (void)listAdapter:(IGListAdapter *)listAdapter didEndDeceleratingSectionController:(IGListSectionController *)sectionController NS_SWIFT_NAME(listAdapter(_:didEndDecelerating:));
+- (void)listAdapter:(IGListAdapter *)listAdapter didEndDeceleratingSectionController:(IGListSectionController *)sectionController;
 
 @end
 
